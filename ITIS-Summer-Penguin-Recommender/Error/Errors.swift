@@ -16,7 +16,17 @@ enum UserStorageError: AppError {
     
     var message: String {
         switch self {
-        case .alreadyExist: return "user already exist"
+        case .alreadyExist: return "Пользователь с таким именем уже существует"
+        }
+    }
+}
+
+enum AuthenticationError: AppError {
+    case incorrectCredentials
+    
+    var message: String {
+        switch self {
+        case .incorrectCredentials: return "Неправильное имя или пароль"
         }
     }
 }

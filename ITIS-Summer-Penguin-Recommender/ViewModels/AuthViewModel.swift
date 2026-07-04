@@ -9,9 +9,9 @@ import Foundation
 
 protocol AuthViewModel {
     
-    func register()
+    func register(_ user: User) throws
     
-    func login()
+    func login(_ user: User) throws
     
-    func logout()
+    func logout(_ user: User)
 }

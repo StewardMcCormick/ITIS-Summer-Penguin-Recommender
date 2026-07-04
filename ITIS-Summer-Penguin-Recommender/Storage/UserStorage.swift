@@ -11,5 +11,5 @@ protocol UserStorage {
     
     func save(_ user: User) throws
     
-    func getById(_ id: Int64) -> User?
+    func getById(_ username: String) -> User?
 }
