@@ -7,11 +7,11 @@
 
 import Foundation
 
-protocol AuthViewModel {
+protocol AuthViewModelProtocol {
     
     func register(_ user: User) throws
     
     func login(_ user: User) throws
     
-    func logout(_ user: User)
+    func logout()
 }

@@ -7,9 +7,9 @@
 
 import Foundation
 
-protocol UserStorage {
+protocol UserStorageProtocol {
     
     func save(_ user: User) throws
     
-    func getById(_ username: String) -> User?
+    func getByUsername(_ username: String) -> User?
 }
