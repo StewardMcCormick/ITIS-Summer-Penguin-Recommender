@@ -8,10 +8,11 @@
 import Foundation
 
 protocol AuthViewModel {
+    var currentUser: User? { get set }
+    var isLoggedIn: Bool { get set }
+    var errorMessage: String? { get set }
     
-    func register()
-    
-    func login()
-    
+    func login(email: String, password: String) -> Bool
+    func register(username: String, email: String, password: String) -> Bool
     func logout()
 }

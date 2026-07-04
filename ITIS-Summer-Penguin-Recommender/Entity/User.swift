@@ -7,6 +7,16 @@
 
 import Foundation
 
-struct User {
+struct User: Codable {
+    let id: Int64
+    var username: String
+    var email: String
+    var password: String
     
+    init(id: Int64 = Int64.random(in: 1...Int64.max), username: String, email: String, password: String) {
+        self.id = id
+        self.username = username
+        self.email = email
+        self.password = password
+    }
 }
