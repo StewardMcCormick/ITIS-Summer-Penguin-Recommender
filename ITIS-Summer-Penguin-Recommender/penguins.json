@@ -1,0 +1,471 @@
+{
+  "breeds": [
+    {
+      "id": 1,
+      "name": "Императорский",
+      
+      "math_params": {
+        "temp": 0,
+        "space": 10,
+        "activity": 2,
+        "noise": 1,
+        "social": 3
+      },
+      
+      "limits": {
+        "min_temperature": -10,
+        "max_temperature": 2,
+        "min_space_sqm": 45,
+        "min_group_size": 2,
+        "max_group_size": 2
+      },
+      
+      "user_info": {
+        "scientific_name": "Aptenodytes forsteri",
+        "size": "Крупный",
+        "height_cm": 120,
+        "weight_kg": 40,
+        "lifespan_years": 20,
+        "description": "Самый крупный и величественный пингвин. Спокойный, степенный, предпочитает тишину и уединение с партнёром. Требует огромного пространства и холода.",
+        "care_tips": "Требуется огромный вольер с ледяной водой. Живёт только в парах. Идеален для крупных загородных домов.",
+        "pros": ["Красивый и редкий", "Не шумный", "Спокойный характер"],
+        "cons": ["Очень дорогой в содержании", "Требует холода", "Нужно много места"],
+        "diet": "Рыба, криль",
+        "image_url": "/images/penguins/emperor.jpg",
+        "fun_fact": "Самцы высиживают яйца 60 дней при температуре -60°C, стоя на одном месте."
+      }
+    },
+    
+    {
+      "id": 2,
+      "name": "Адели",
+      
+      "math_params": {
+        "temp": 0,
+        "space": 8,
+        "activity": 9,
+        "noise": 9,
+        "social": 10
+      },
+      
+      "limits": {
+        "min_temperature": -10,
+        "max_temperature": 2,
+        "min_space_sqm": 30,
+        "min_group_size": 3,
+        "max_group_size": 50
+      },
+      
+      "user_info": {
+        "scientific_name": "Pygoscelis adeliae",
+        "size": "Средний",
+        "height_cm": 70,
+        "weight_kg": 5,
+        "lifespan_years": 15,
+        "description": "Энергичные разбойники и балагуры. Обожают шумные компании и никогда не скучают. Требуют много общения и активных игр.",
+        "care_tips": "Нельзя держать в одиночестве. Требуется компания других пингвинов. Любят игры с водой.",
+        "pros": ["Очень дружелюбный", "Забавный", "Активный"],
+        "cons": ["Очень шумный", "Требует постоянного внимания", "Агрессивен к чужакам"],
+        "diet": "Криль, мелкая рыба",
+        "image_url": "/images/penguins/adelie.jpg",
+        "fun_fact": "Адели — одни из самых ловких пловцов, развивают скорость до 40 км/ч в воде."
+      }
+    },
+    
+    {
+      "id": 3,
+      "name": "Антарктический",
+      
+      "math_params": {
+        "temp": 4,
+        "space": 7,
+        "activity": 8,
+        "noise": 8,
+        "social": 9
+      },
+      
+      "limits": {
+        "min_temperature": -5,
+        "max_temperature": 10,
+        "min_space_sqm": 25,
+        "min_group_size": 3,
+        "max_group_size": 30
+      },
+      
+      "user_info": {
+        "scientific_name": "Pygoscelis antarcticus",
+        "size": "Средний",
+        "height_cm": 70,
+        "weight_kg": 4.5,
+        "lifespan_years": 15,
+        "description": "Активный, крикливый, но немного агрессивнее Адели. Живёт большими колониями. Хорошо приспосабливается к умеренному климату.",
+        "care_tips": "Хорошо уживается с другими видами. Требуется просторный вольер и бассейн.",
+        "pros": ["Общительный", "Выносливый", "Хорошо переносит разные температуры"],
+        "cons": ["Может быть агрессивным", "Громкий", "Требует стаи"],
+        "diet": "Криль, рыба",
+        "image_url": "/images/penguins/antarctic.jpg",
+        "fun_fact": "У этого вида есть характерная чёрная полоса на голове, за которую их называют 'певцы'."
+      }
+    },
+    
+    {
+      "id": 4,
+      "name": "Папуасский",
+      
+      "math_params": {
+        "temp": 3,
+        "space": 8,
+        "activity": 5,
+        "noise": 5,
+        "social": 5
+      },
+      
+      "limits": {
+        "min_temperature": -5,
+        "max_temperature": 10,
+        "min_space_sqm": 30,
+        "min_group_size": 2,
+        "max_group_size": 10
+      },
+      
+      "user_info": {
+        "scientific_name": "Pygoscelis papua",
+        "size": "Крупный",
+        "height_cm": 80,
+        "weight_kg": 8.5,
+        "lifespan_years": 20,
+        "description": "Один из самых красивых пингвинов с ярким оранжевым клювом. Очень пугливый и осторожный, предпочитает тихие, спокойные условия.",
+        "care_tips": "Требует тишины и покоя. Не переносит стресс. Нужен просторный вольер с чистой водой.",
+        "pros": ["Красивый внешний вид", "Спокойный", "Чистоплотный"],
+        "cons": ["Очень пугливый", "Плохо переносит шум", "Требователен к воде"],
+        "diet": "Рыба, криль, кальмары",
+        "image_url": "/images/penguins/gentoo.jpg",
+        "fun_fact": "Папуасские пингвины — самые быстрые под водой среди всех пингвинов (до 36 км/ч)."
+      }
+    },
+    
+    {
+      "id": 5,
+      "name": "Королевский",
+      
+      "math_params": {
+        "temp": 4,
+        "space": 8,
+        "activity": 5,
+        "noise": 5,
+        "social": 7
+      },
+      
+      "limits": {
+        "min_temperature": -5,
+        "max_temperature": 12,
+        "min_space_sqm": 35,
+        "min_group_size": 3,
+        "max_group_size": 20
+      },
+      
+      "user_info": {
+        "scientific_name": "Aptenodytes patagonicus",
+        "size": "Крупный",
+        "height_cm": 95,
+        "weight_kg": 15,
+        "lifespan_years": 25,
+        "description": "Близкий родственник императорского, но чуть теплолюбивее. Сочетает в себе благородство и общительность. Живёт в больших колониях.",
+        "care_tips": "Нуждается в просторном вольере и компании других королевских пингвинов.",
+        "pros": ["Красивый", "Общительный", "Не слишком шумный"],
+        "cons": ["Дорогой", "Требует стаи", "Много ест"],
+        "diet": "Рыба, кальмары",
+        "image_url": "/images/penguins/king.jpg",
+        "fun_fact": "Королевские пингвины могут плавать до 100 км в поисках еды."
+      }
+    },
+    
+    {
+      "id": 6,
+      "name": "Золотоволосый",
+      
+      "math_params": {
+        "temp": 5,
+        "space": 5,
+        "activity": 9,
+        "noise": 9,
+        "social": 8
+      },
+      
+      "limits": {
+        "min_temperature": -2,
+        "max_temperature": 14,
+        "min_space_sqm": 20,
+        "min_group_size": 3,
+        "max_group_size": 15
+      },
+      
+      "user_info": {
+        "scientific_name": "Eudyptes chrysolophus",
+        "size": "Средний",
+        "height_cm": 65,
+        "weight_kg": 5.5,
+        "lifespan_years": 12,
+        "description": "Энергичный, крикливый, с яркими жёлтыми перьями на голове. Настоящий задира, всегда в центре внимания.",
+        "care_tips": "Требует активных игр и общения. Хорошо себя чувствует в средних вольерах.",
+        "pros": ["Яркий внешний вид", "Очень активный", "Забавный"],
+        "cons": ["Очень шумный", "Агрессивный", "Беспокойный"],
+        "diet": "Криль, рыба",
+        "image_url": "/images/penguins/macaroni.jpg",
+        "fun_fact": "Золотоволосых пингвинов иногда называют 'макаронами' из-за моды на жёлтые парики в XVIII веке."
+      }
+    },
+    
+    {
+      "id": 7,
+      "name": "Хохлатый (Rockhopper)",
+      
+      "math_params": {
+        "temp": 5,
+        "space": 5,
+        "activity": 10,
+        "noise": 10,
+        "social": 7
+      },
+      
+      "limits": {
+        "min_temperature": -2,
+        "max_temperature": 14,
+        "min_space_sqm": 20,
+        "min_group_size": 2,
+        "max_group_size": 10
+      },
+      
+      "user_info": {
+        "scientific_name": "Eudyptes chrysocome",
+        "size": "Мелкий",
+        "height_cm": 50,
+        "weight_kg": 3,
+        "lifespan_years": 10,
+        "description": "Самый буйный и шумный вид. Прыгает по скалам, громко кричит и постоянно спорит с соседями. Абсолютный экстраверт.",
+        "care_tips": "Требует много пространства для прыжков и скал. Не подходит для спокойных людей.",
+        "pros": ["Интересный", "Храбрый", "Активный"],
+        "cons": ["Очень шумный", "Агрессивный", "Своенравный"],
+        "diet": "Криль, ракообразные",
+        "image_url": "/images/penguins/rockhopper.jpg",
+        "fun_fact": "Своё название получил за способность прыгать по скалам на высоту до 1.5 метров."
+      }
+    },
+    
+    {
+      "id": 8,
+      "name": "Пингвин Гумбольдта",
+      
+      "math_params": {
+        "temp": 7,
+        "space": 5,
+        "activity": 5,
+        "noise": 5,
+        "social": 5
+      },
+      
+      "limits": {
+        "min_temperature": 4,
+        "max_temperature": 18,
+        "min_space_sqm": 15,
+        "min_group_size": 1,
+        "max_group_size": 6
+      },
+      
+      "user_info": {
+        "scientific_name": "Spheniscus humboldti",
+        "size": "Средний",
+        "height_cm": 60,
+        "weight_kg": 4.5,
+        "lifespan_years": 20,
+        "description": "Спокойный, уравновешенный пингвин из Южной Америки. Легко адаптируется к человеку, но не любит резких изменений.",
+        "care_tips": "Идеален для первых шагов. Легко приручается. Нуждается в стабильной среде.",
+        "pros": ["Дружелюбный", "Не шумный", "Легко уживается"],
+        "cons": ["Подвержен стрессу", "Требует внимания", "Может простудиться"],
+        "diet": "Рыба, кальмары",
+        "image_url": "/images/penguins/humboldt.jpg",
+        "fun_fact": "Гумбольдта называют 'голым пингвином' из-за розовых пятен на клюве."
+      }
+    },
+    
+    {
+      "id": 9,
+      "name": "Магелланов",
+      
+      "math_params": {
+        "temp": 8,
+        "space": 5,
+        "activity": 7,
+        "noise": 7,
+        "social": 8
+      },
+      
+      "limits": {
+        "min_temperature": 4,
+        "max_temperature": 20,
+        "min_space_sqm": 15,
+        "min_group_size": 2,
+        "max_group_size": 10
+      },
+      
+      "user_info": {
+        "scientific_name": "Spheniscus magellanicus",
+        "size": "Средний",
+        "height_cm": 65,
+        "weight_kg": 4,
+        "lifespan_years": 25,
+        "description": "Энергичный и общительный пингвин, известный своим громким 'ослиным' криком. Любит компании и активные игры.",
+        "care_tips": "Хорошо чувствует себя в стандартных квартирах. Нуждается в компании.",
+        "pros": ["Дружелюбный", "Активный", "Выносливый"],
+        "cons": ["Громкий", "Нуждается в стае", "Может быть агрессивным"],
+        "diet": "Рыба, кальмары",
+        "image_url": "/images/penguins/magellanic.jpg",
+        "fun_fact": "Магеллановы пингвины — самые путешествующие: заплывают до Бразилии, преодолевая 5000 км."
+      }
+    },
+    
+    {
+      "id": 10,
+      "name": "Африканский (Очковый)",
+      
+      "math_params": {
+        "temp": 8,
+        "space": 5,
+        "activity": 8,
+        "noise": 8,
+        "social": 9
+      },
+      
+      "limits": {
+        "min_temperature": 5,
+        "max_temperature": 26,
+        "min_space_sqm": 15,
+        "min_group_size": 2,
+        "max_group_size": 12
+      },
+      
+      "user_info": {
+        "scientific_name": "Spheniscus demersus",
+        "size": "Средний",
+        "height_cm": 65,
+        "weight_kg": 3.5,
+        "lifespan_years": 20,
+        "description": "Самый тёплый вид, идеален для жаркого климата. Очень общительный, шумный и активный. Настоящий тусовщик.",
+        "care_tips": "Обязательно установите бассейн с охлаждением и тенистые участки.",
+        "pros": ["Идеален для тёплого климата", "Дружелюбный", "Общительный"],
+        "cons": ["Очень шумный", "Много ест", "Требует компании"],
+        "diet": "Рыба, сардины",
+        "image_url": "/images/penguins/african.jpg",
+        "fun_fact": "Эти пингвины издают звуки, напоминающие ослиный крик, за что их называют 'ослиными пингвинами'."
+      }
+    },
+    
+    {
+      "id": 11,
+      "name": "Малый (Голубой)",
+      
+      "math_params": {
+        "temp": 9,
+        "space": 2,
+        "activity": 4,
+        "noise": 2,
+        "social": 1
+      },
+      
+      "limits": {
+        "min_temperature": 10,
+        "max_temperature": 25,
+        "min_space_sqm": 8,
+        "min_group_size": 1,
+        "max_group_size": 3
+      },
+      
+      "user_info": {
+        "scientific_name": "Eudyptula minor",
+        "size": "Мелкий",
+        "height_cm": 35,
+        "weight_kg": 1.5,
+        "lifespan_years": 15,
+        "description": "Самый маленький вид пингвинов. Идеален для квартир. Тихий, не требовательный, предпочитает одиночество или пару.",
+        "care_tips": "Идеален для студий. Не требует много пространства. Хорошо уживается в небольших вольерах.",
+        "pros": ["Компактный", "Тихий", "Не требовательный"],
+        "cons": ["Пугливый", "Не любит чужих", "Очень тихий (скучает один)"],
+        "diet": "Мелкая рыба, криль",
+        "image_url": "/images/penguins/little.jpg",
+        "fun_fact": "У Голубого пингвина уникальный голубоватый оттенок перьев, который виден только на солнце."
+      }
+    },
+    
+    {
+      "id": 12,
+      "name": "Желтоглазый",
+      
+      "math_params": {
+        "temp": 4,
+        "space": 5,
+        "activity": 2,
+        "noise": 1,
+        "social": 1
+      },
+      
+      "limits": {
+        "min_temperature": 0,
+        "max_temperature": 12,
+        "min_space_sqm": 25,
+        "min_group_size": 1,
+        "max_group_size": 2
+      },
+      
+      "user_info": {
+        "scientific_name": "Megadyptes antipodes",
+        "size": "Средний",
+        "height_cm": 70,
+        "weight_kg": 6,
+        "lifespan_years": 20,
+        "description": "Очень редкий, скрытный и пугливый вид. Предпочитает жить в одиночестве или парах в густых лесах. Почти не кричит.",
+        "care_tips": "Требует абсолютной тишины и уединения. Плохо переносит людей. Для опытных владельцев.",
+        "pros": ["Уникальный вид", "Красивый", "Не шумный"],
+        "cons": ["Очень редкий", "Дорогой", "Трудный в уходе"],
+        "diet": "Рыба, кальмары",
+        "image_url": "/images/penguins/yellow-eyed.jpg",
+        "fun_fact": "Это один из самых редких пингвинов в мире — в природе осталось всего около 3000 особей."
+      }
+    },
+    
+    {
+      "id": 13,
+      "name": "Пингвин Виктории",
+      
+      "math_params": {
+        "temp": 4,
+        "space": 5,
+        "activity": 2,
+        "noise": 1,
+        "social": 2
+      },
+      
+      "limits": {
+        "min_temperature": 0,
+        "max_temperature": 12,
+        "min_space_sqm": 20,
+        "min_group_size": 1,
+        "max_group_size": 3
+      },
+      
+      "user_info": {
+        "scientific_name": "Eudyptes pachyrhynchus",
+        "size": "Средний",
+        "height_cm": 60,
+        "weight_kg": 4,
+        "lifespan_years": 15,
+        "description": "Обитает в лесах Новой Зеландии. Пугливый, скрытный, почти не контактирует с другими пингвинами. Ценит тишину.",
+        "care_tips": "Требует скрытых мест для гнезда. Не любит яркий свет и шум.",
+        "pros": ["Спокойный", "Не шумный", "Интересный"],
+        "cons": ["Пугливый", "Скрытный", "Трудный в контакте"],
+        "diet": "Рыба, криль",
+        "image_url": "/images/penguins/victoria.jpg",
+        "fun_fact": "Этот вид может жить в лесах вдали от воды, что уникально для пингвинов."
+      }
+    }
+  ]
+}

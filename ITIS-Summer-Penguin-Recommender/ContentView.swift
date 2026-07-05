@@ -9,7 +9,12 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        LoginView(viewModel: AuthViewModelImpl())
+//        LoginView(viewModel: AuthViewModelImpl())
+        Button("Test") {
+            let ps = JSONPenguinStorage(jsonFilename: "penguins")
+            
+            print(ps.getPenguinsData() as Any)
+        }
     }
 }
 
