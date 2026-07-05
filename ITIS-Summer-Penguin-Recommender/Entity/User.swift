@@ -8,11 +8,11 @@
 import Foundation
 
 struct User: Codable {
-    let id: Int64
+    let id: UUID
     var username: String
     var password: String
     
-    init(id: Int64 = Int64.random(in: 1...Int64.max), username: String, password: String) {
+    init(id: UUID = UUID(), username: String, password: String) {
         self.id = id
         self.username = username
         self.password = password

@@ -22,7 +22,6 @@ class AuthViewModelImpl: AuthViewModel {
         checkCurrentUser()
     }
     
-    //вход в систему
     func login(username: String, password: String) -> Bool {
         guard !username.isEmpty, !password.isEmpty else {
             errorMessage = "Заполните все поля"
@@ -46,7 +45,6 @@ class AuthViewModelImpl: AuthViewModel {
         return true
     }
     
-    //регистрация
     func register(username: String, password: String, repeatedPassword: String) -> Bool {
         guard !username.isEmpty, !password.isEmpty else {
             errorMessage = "Заполните все поля"
@@ -70,7 +68,6 @@ class AuthViewModelImpl: AuthViewModel {
         return true
     }
     
-    //выход
     func logout() {
         currentUser = nil
         isLoggedIn = false

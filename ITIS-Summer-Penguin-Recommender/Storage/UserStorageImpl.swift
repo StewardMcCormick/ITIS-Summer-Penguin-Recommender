@@ -19,7 +19,7 @@ class UserStorageImpl: UserStorage {
         }
     }
     
-    func getById(_ id: Int64) -> User? {
+    func getById(_ id: UUID) -> User? {
         return getAllUsers().first { $0.id == id }
     }
     
