@@ -10,7 +10,7 @@ protocol UserStorage {
     
     func getById(_ id: Int64) -> User?
     
-    func getByEmail(_ email: String) -> User?
+    func getByUsername(_ username: String) -> User?
     
     func getAllUsers() -> [User]
 }

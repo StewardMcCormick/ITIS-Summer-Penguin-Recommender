@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct LoginView: View {
-    @State private var email = ""
     @State private var password = ""
+    @State private var repaetedPassrowd = ""
     @State private var isRegistering = false
     @State private var username = ""
     var viewModel: AuthViewModel 
@@ -27,18 +27,18 @@ struct LoginView: View {
                     Text(isRegistering ? "Регистрация" : "Вход")
                         .font(.system(size: 28, weight: .semibold))
                     
-                    TextField("Email", text: $email)
+                    TextField("Имя пользователя", text: $username)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
                         .autocapitalization(.none)
                         .keyboardType(.emailAddress)
                     
-                    if isRegistering {
-                        TextField("Имя пользователя", text: $username)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                    }
-                    
                     SecureField("Пароль", text: $password)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
+                    
+                    if isRegistering {
+                        SecureField("Повторите пароль", text: $repaetedPassrowd)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                    }
                     
                     if let error = viewModel.errorMessage {
                         Text(error)
@@ -77,11 +77,11 @@ struct LoginView: View {
     
     private func handleSubmit() {
         if isRegistering {
-            if viewModel.register(username: username, email: email, password: password) {
+            if viewModel.register(username: username, password: password, repeatedPassword: repaetedPassrowd) {
                 isRegistering = false
             }
         } else {
-            _ = viewModel.login(email: email, password: password)
+            _ = viewModel.login(username: username, password: password)
         }
     }
 }

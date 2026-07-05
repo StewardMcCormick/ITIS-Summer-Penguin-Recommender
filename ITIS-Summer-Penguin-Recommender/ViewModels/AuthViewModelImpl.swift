@@ -23,13 +23,13 @@ class AuthViewModelImpl: AuthViewModel {
     }
     
     //вход в систему
-    func login(email: String, password: String) -> Bool {
-        guard !email.isEmpty, !password.isEmpty else {
+    func login(username: String, password: String) -> Bool {
+        guard !username.isEmpty, !password.isEmpty else {
             errorMessage = "Заполните все поля"
             return false
         }
         
-        guard let user = storage.getByEmail(email) else {
+        guard let user = storage.getByUsername(username) else {
             errorMessage = "Пользователь не найден"
             return false
         }
@@ -47,18 +47,23 @@ class AuthViewModelImpl: AuthViewModel {
     }
     
     //регистрация
-    func register(username: String, email: String, password: String) -> Bool {
-        guard !username.isEmpty, !email.isEmpty, !password.isEmpty else {
+    func register(username: String, password: String, repeatedPassword: String) -> Bool {
+        guard !username.isEmpty, !password.isEmpty else {
             errorMessage = "Заполните все поля"
             return false
         }
         
-        if storage.getByEmail(email) != nil {
-            errorMessage = "Пользователь с таким email уже существует"
+        guard password == repeatedPassword else {
+            errorMessage = "Пароли не соответствуют"
             return false
         }
         
-        let newUser = User(username: username, email: email, password: password)
+        if storage.getByUsername(username) != nil {
+            errorMessage = "Пользователь с таким именем уже существует"
+            return false
+        }
+        
+        let newUser = User(username: username, password: password)
         storage.save(newUser)
         
         errorMessage = nil

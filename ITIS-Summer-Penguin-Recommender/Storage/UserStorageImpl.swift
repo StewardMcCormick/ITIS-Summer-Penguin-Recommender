@@ -23,8 +23,8 @@ class UserStorageImpl: UserStorage {
         return getAllUsers().first { $0.id == id }
     }
     
-    func getByEmail(_ email: String) -> User? {
-        return getAllUsers().first { $0.email.lowercased() == email.lowercased() }
+    func getByUsername(_ username: String) -> User? {
+        return getAllUsers().first { $0.username.lowercased() == username.lowercased() }
     }
     
     func getAllUsers() -> [User] {

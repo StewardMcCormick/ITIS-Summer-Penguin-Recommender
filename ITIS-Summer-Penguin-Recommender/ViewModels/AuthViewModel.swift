@@ -12,7 +12,7 @@ protocol AuthViewModel {
     var isLoggedIn: Bool { get set }
     var errorMessage: String? { get set }
     
-    func login(email: String, password: String) -> Bool
-    func register(username: String, email: String, password: String) -> Bool
+    func login(username: String, password: String) -> Bool
+    func register(username: String, password: String, repeatedPassword: String) -> Bool
     func logout()
 }
