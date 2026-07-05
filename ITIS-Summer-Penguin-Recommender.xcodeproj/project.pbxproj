@@ -30,11 +30,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		655528FD2FFA97800083B32C /* penguin_info */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = penguin_info;
-			sourceTree = "<group>";
-		};
 		65C6F6E32FF8CE2100E9B3EA /* ITIS-Summer-Penguin-Recommender */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "ITIS-Summer-Penguin-Recommender";
@@ -80,7 +75,6 @@
 		65C6F6D82FF8CE2100E9B3EA = {
 			isa = PBXGroup;
 			children = (
-				655528FD2FFA97800083B32C /* penguin_info */,
 				65C6F6E32FF8CE2100E9B3EA /* ITIS-Summer-Penguin-Recommender */,
 				65C6F6F12FF8CE2200E9B3EA /* ITIS-Summer-Penguin-RecommenderTests */,
 				65C6F6FB2FF8CE2200E9B3EA /* ITIS-Summer-Penguin-RecommenderUITests */,
@@ -114,7 +108,6 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				655528FD2FFA97800083B32C /* penguin_info */,
 				65C6F6E32FF8CE2100E9B3EA /* ITIS-Summer-Penguin-Recommender */,
 			);
 			name = "ITIS-Summer-Penguin-Recommender";

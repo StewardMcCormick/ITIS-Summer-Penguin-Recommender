@@ -28,7 +28,7 @@ class JSONPenguinStorage: PenguinStorage {
         
         guard let fileUrl = Bundle.main.url(forResource: jsonFilename, withExtension: "json")
         else {
-            print("Файл \(jsonFilename).json не найден в папке penguin_info")
+            print("Файл \(jsonFilename).json не найден")
             return nil
         }
         
