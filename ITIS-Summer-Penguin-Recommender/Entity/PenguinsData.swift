@@ -10,7 +10,7 @@ struct PenguinsData: Decodable {
 }
 
 // MARK: - Порода
-struct Breed: Decodable {
+struct Breed: Decodable, Equatable, Hashable {
     let id: Int
     let name: String
     let mathParams: MathParams
@@ -26,7 +26,7 @@ struct Breed: Decodable {
 }
 
 // MARK: - Математические параметры (для расчётов)
-struct MathParams: Decodable {
+struct MathParams: Decodable, Equatable, Hashable {
     let temp: Int          // 0-10
     let space: Int         // 0-10
     let activity: Int      // 0-10
@@ -35,7 +35,7 @@ struct MathParams: Decodable {
 }
 
 // MARK: - Жёсткие ограничения (для фильтрации)
-struct Limits: Decodable {
+struct Limits: Decodable, Equatable, Hashable {
     let minTemperature: Double
     let maxTemperature: Double
     let minSpaceSqm: Int
@@ -52,7 +52,7 @@ struct Limits: Decodable {
 }
 
 // MARK: - Информация для пользователя
-struct UserInfo: Decodable {
+struct UserInfo: Decodable, Equatable, Hashable {
     let scientificName: String
     let size: String
     let heightCm: Int
