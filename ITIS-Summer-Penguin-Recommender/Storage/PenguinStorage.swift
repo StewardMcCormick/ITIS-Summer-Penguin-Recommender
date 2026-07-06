@@ -7,8 +7,13 @@
 
 import Foundation
 
+enum PenguinStorageError: Error {
+    case fileNotFound
+    case decodingError(Error)
+}
+
 protocol PenguinStorage {
-    func getPenguinsData() -> PenguinsData?
+    func getPenguinsData() throws -> PenguinsData
 }
 
 class JSONPenguinStorage: PenguinStorage {
@@ -21,15 +26,14 @@ class JSONPenguinStorage: PenguinStorage {
         self.jsonFilename = jsonFilename
     }
     
-    func getPenguinsData() -> PenguinsData? {
+    func getPenguinsData() throws -> PenguinsData {
         if let cached = penguinsData {
             return cached
         }
         
         guard let fileUrl = Bundle.main.url(forResource: jsonFilename, withExtension: "json")
         else {
-            print("Файл \(jsonFilename).json не найден")
-            return nil
+            throw PenguinStorageError.fileNotFound
         }
         
         do {
@@ -38,8 +42,7 @@ class JSONPenguinStorage: PenguinStorage {
             penguinsData = result
             return result
         } catch {
-            print("Ошибка загрузки или декодирования: \(error)")
-            return nil
+            throw PenguinStorageError.decodingError(error)
         }
     }
 }

@@ -7,32 +7,52 @@
 
 import Foundation
 
+enum QuizStorageError: Error {
+    case fileNotFound
+    case decodingError(Error)
+}
+
 protocol QuizStorage {
-    func getAllQuestions() -> [Question]
+    func getAllQuestions() throws -> [Question]
     
-    func getQuizMetadata() -> Metadata
+    func getQuizMetadata() throws -> Metadata
 }
 
 class JSONQuizStorage: QuizStorage {
     private let jsonFilename: String
     
-    private var quiz: Quiz
+    private var quiz: Quiz?
     
     init(jsonFilename: String) {
         self.jsonFilename = jsonFilename
-        
-        let fileUrl = Bundle.main.url(forResource: jsonFilename, withExtension: "json")
-        
-        let jsonData = try! Data(contentsOf: fileUrl!)
-        let result = try! JSONDecoder().decode(Quiz.self, from: jsonData)
-        quiz = result
     }
     
-    func getAllQuestions() -> [Question] {
-        return quiz.questions
+    private func loadQuiz() throws -> Quiz {
+        guard let fileUrl = Bundle.main.url(forResource: jsonFilename, withExtension: "json") else {
+            throw QuizStorageError.fileNotFound
+        }
+        
+        let jsonData = try Data(contentsOf: fileUrl)
+        return try JSONDecoder().decode(Quiz.self, from: jsonData)
     }
     
-    func getQuizMetadata() -> Metadata {
-        return quiz.metadata
+    func getAllQuestions() throws -> [Question] {
+        if let cached = quiz {
+            return cached.questions
+        }
+        
+        let loadedQuiz = try loadQuiz()
+        quiz = loadedQuiz
+        return loadedQuiz.questions
+    }
+    
+    func getQuizMetadata() throws -> Metadata {
+        if let cached = quiz {
+            return cached.metadata
+        }
+        
+        let loadedQuiz = try loadQuiz()
+        quiz = loadedQuiz
+        return loadedQuiz.metadata
     }
 }
