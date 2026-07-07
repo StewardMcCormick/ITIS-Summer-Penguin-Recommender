@@ -13,14 +13,15 @@ enum QuizTab: String, CaseIterable {
 }
 
 struct QuizView: View {
-    @Environment(AuthViewModelImpl.self) private var viewModel
+    private var viewModel: AuthViewModel
     @State private var selectedAnswers: [String: Answer] = [:]
     @State private var selectedTab: QuizTab = .quiz
     @State private var isProfileShows: Bool = false
     private let questions: [Question]
 
-    init(quizStorage: QuizStorage) {
+    init(quizStorage: QuizStorage, viewModel: AuthViewModel) {
         self.questions = (try? quizStorage.getAllQuestions()) ?? []
+        self.viewModel = viewModel
     }
 
     var body: some View {
@@ -35,9 +36,9 @@ struct QuizView: View {
                 }
             }
         }
-        .navigationBarHidden(true)
-         .sheet(isPresented: $isProfileShows) {
-             UserProfileView(viewModel: viewModel)
+        .toolbar(.hidden, for: .navigationBar)
+        .sheet(isPresented: $isProfileShows) {
+            UserProfileView(viewModel: viewModel)
         }
     }
 
@@ -74,7 +75,6 @@ struct QuizView: View {
                             .padding(.horizontal, 20)
                             .padding(.vertical, 8)
 
-                        // Подчёркивание активного таба
                         Rectangle()
                             .fill(selectedTab == tab ? Color.blue : Color.clear)
                             .frame(height: 3)
@@ -124,7 +124,9 @@ struct QuizView: View {
                         .font(.system(size: 14))
                         .foregroundColor(.black)
 
-                    Button(action: {}) {
+                    Button(action: {
+                        // TODO: реализовать загрузку фото
+                    }) {
                         Text("Выбрать фото")
                             .font(.system(size: 16))
                             .foregroundColor(.black)
@@ -210,6 +212,5 @@ struct QuestionBlock: View {
 }
 
 #Preview {
-    QuizView(quizStorage: JSONQuizStorage(jsonFilename: "quiz"))
-        .environment(AuthViewModelImpl())
+    QuizView(quizStorage: JSONQuizStorage(jsonFilename: "quiz"), viewModel: AuthViewModelImpl())
 }

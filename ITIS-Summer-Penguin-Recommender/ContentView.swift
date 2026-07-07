@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var viewModel = AuthViewModelImpl()
+    @State private var viewModel: AuthViewModel = AuthViewModelImpl()
     private let quizStorage: QuizStorage
     
     init() {
@@ -19,8 +19,7 @@ struct ContentView: View {
     var body: some View {
         Group {
             if viewModel.isLoggedIn {
-                QuizView(quizStorage: quizStorage)
-                    .environment(viewModel)
+                QuizView(quizStorage: quizStorage, viewModel: viewModel)
             } else {
                 LoginView(viewModel: viewModel)
             }
