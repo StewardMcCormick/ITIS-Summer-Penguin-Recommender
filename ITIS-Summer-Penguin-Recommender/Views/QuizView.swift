@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-/// Вкладки для навигационной панели
 enum QuizTab: String, CaseIterable {
     case quiz = "Анкета"
     case history = "История"
@@ -26,10 +25,7 @@ struct QuizView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // Кастомная верхняя панель с двумя табами и кнопкой профиля
             topTabBar
-
-            // Контент в зависимости от выбранного таба
             Group {
                 switch selectedTab {
                 case .quiz:
@@ -39,17 +35,15 @@ struct QuizView: View {
                 }
             }
         }
-        .navigationBarHidden(true) // скрываем стандартный navigation bar
-        // Раскомментируйте, когда добавите UserProfileView:
-        // .sheet(isPresented: $isProfileShows) {
-        //     UserProfileView(viewModel: viewModel)
-        // }
+        .navigationBarHidden(true)
+         .sheet(isPresented: $isProfileShows) {
+             UserProfileView(viewModel: viewModel)
+        }
     }
 
     // MARK: - Кастомная панель табов
     private var topTabBar: some View {
         HStack(spacing: 0) {
-            // Кнопка профиля в левом верхнем углу
             Button(action: {
                 isProfileShows = true
             }) {
@@ -64,9 +58,6 @@ struct QuizView: View {
             }
             .padding(.leading, 8)
             .buttonStyle(PlainButtonStyle())
-            .sheet(isPresented: $isProfileShows) {
-                UserProfileView(viewModel: viewModel)
-            }
 
             Spacer()
 
@@ -97,10 +88,8 @@ struct QuizView: View {
                 .buttonStyle(PlainButtonStyle())
             }
 
-            // Чтобы кнопка профиля не смещала табы, добавим прозрачный spacer справа
-            // (опционально, для симметрии можно сделать равные отступы)
             Spacer()
-                .frame(width: 48) // ширина, равная примерной ширине кнопки профиля
+                .frame(width: 48)
         }
         .padding(.horizontal)
         .padding(.top, 10)
@@ -112,13 +101,6 @@ struct QuizView: View {
     private var quizContent: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 25) {
-                // Заголовки анкеты можно оставить или убрать – они уже есть в таб-баре.
-                // Для единообразия с историей оставляем их закомментированными:
-                // Text("Анкета")
-                //     .font(.system(size: 36, weight: .bold))
-                //     .underline()
-                //     .padding(.top, 10)
-                //
                  Text("Отвечай честно! 🤨")
                      .font(.system(size: 30, weight: .bold))
                      .padding(.top, 40)
@@ -224,15 +206,6 @@ struct QuestionBlock: View {
                 }
             }
         }
-    }
-}
-
-// MARK: - Отдельная HistoryView (оставлена для совместимости, не используется в QuizView)
-struct HistoryView: View {
-    var body: some View {
-        Text("История записей")
-            .font(.title)
-            .navigationTitle("История")
     }
 }
 
