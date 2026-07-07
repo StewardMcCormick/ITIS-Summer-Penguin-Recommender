@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var viewModel: AuthViewModel = AuthViewModelImpl()
+    @State private var viewModel = AuthViewModelImpl()
     private let quizStorage: QuizStorage
     
     init() {

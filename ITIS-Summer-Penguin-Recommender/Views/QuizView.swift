@@ -140,7 +140,9 @@ struct QuizView: View {
                     .padding(.top, 5)
                 }
 
-                Button(action: {}) {
+                Button(action: {
+                    // TODO: реализовать подбор пингвина
+                }) {
                     Text("Дай Пингвина!")
                         .font(.system(size: 24, weight: .bold))
                         .foregroundColor(.white)
