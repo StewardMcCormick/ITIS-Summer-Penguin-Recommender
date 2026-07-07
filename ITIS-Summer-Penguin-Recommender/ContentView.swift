@@ -8,8 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var viewModel = AuthViewModelImpl()
+    private let quizStorage: QuizStorage
+    
+    init() {
+        
+        self.quizStorage = JSONQuizStorage(jsonFilename: "quiz")
+    }
+    
     var body: some View {
-        LoginView(viewModel: AuthViewModelImpl())
+        Group {
+            if viewModel.isLoggedIn {
+                QuizView(quizStorage: quizStorage)
+            } else {
+                LoginView(viewModel: viewModel)
+            }
+        }
     }
 }
 
