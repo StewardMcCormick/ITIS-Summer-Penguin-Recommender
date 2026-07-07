@@ -76,6 +76,11 @@ class AuthViewModelImpl: AuthViewModel {
     func updateUser(oldUsername: String, newUsername: String, newPassword: String) -> Bool {
         do {
             try storage.updateUser(oldUsername: oldUsername, newUsername: newUsername, newPassword: newPassword)
+            
+            currentUser?.username = newUsername
+            if newPassword != "" {
+                currentUser?.password = newPassword
+            }
             return true
         } catch {
             errorMessage = error.localizedDescription
