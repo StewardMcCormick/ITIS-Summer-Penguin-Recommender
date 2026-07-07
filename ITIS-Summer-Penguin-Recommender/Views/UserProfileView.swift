@@ -34,21 +34,21 @@ struct UserProfileView: View {
                     
                     VStack(spacing: geometry.size.height * 0.03) {
                         TextField("Имя пользователя", text: $username)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
                             .autocapitalization(.none)
                             .font(.title2)
                             .fontWeight(.semibold)
                             .frame(height: 50)
+                            .padding(.horizontal, 12)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12)
                                     .stroke(Color.gray, lineWidth: 1.5)
                             )
                         
                         SecureField("Пароль", text: $password)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
                             .font(.title2)
                             .fontWeight(.semibold)
                             .frame(height: 50)
+                            .padding(.horizontal, 12)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 12)
                                     .stroke(Color.gray, lineWidth: 1.5)
