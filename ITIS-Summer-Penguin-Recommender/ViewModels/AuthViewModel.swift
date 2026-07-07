@@ -15,5 +15,5 @@ protocol AuthViewModel {
     func login(username: String, password: String)
     func register(username: String, password: String, repeatedPassword: String) -> Bool
     func logout()
-    func updateUser(oldUsername: String, newUsername: String, newPassword: String)
+    func updateUser(oldUsername: String, newUsername: String, newPassword: String) -> Bool
 }

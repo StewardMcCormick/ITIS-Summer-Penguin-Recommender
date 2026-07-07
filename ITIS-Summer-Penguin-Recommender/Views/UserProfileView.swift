@@ -110,7 +110,9 @@ struct UserProfileView: View {
     
     private func saveChanges() {
         if let user = viewModel.currentUser {
-            viewModel.updateUser(oldUsername: user.username, newUsername: username, newPassword: password)
+            if viewModel.updateUser(oldUsername: user.username, newUsername: username, newPassword: password) {
+                dismiss()
+            }
         }
     }
 }

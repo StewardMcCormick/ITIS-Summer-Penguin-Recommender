@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum UserStorageError: Error {
+enum UserStorageError: LocalizedError {
     case userNotFound(username: String)
     case usernameAlreadyTaken(username: String)
     

@@ -73,11 +73,13 @@ class AuthViewModelImpl: AuthViewModel {
         UserDefaults.standard.removeObject(forKey: currentUserKey)
     }
     
-    func updateUser(oldUsername: String, newUsername: String, newPassword: String) {
+    func updateUser(oldUsername: String, newUsername: String, newPassword: String) -> Bool {
         do {
             try storage.updateUser(oldUsername: oldUsername, newUsername: newUsername, newPassword: newPassword)
+            return true
         } catch {
             errorMessage = error.localizedDescription
+            return false
         }
     }
     
