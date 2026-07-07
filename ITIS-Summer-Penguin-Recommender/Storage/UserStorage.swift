@@ -7,6 +7,20 @@
 
 import Foundation
 
+enum UserStorageError: Error {
+    case userNotFound(username: String)
+    case usernameAlreadyTaken(username: String)
+    
+    var errorDescription: String? {
+        switch self {
+        case .userNotFound(let username):
+            return "Пользователь '\(username)' не найден"
+        case .usernameAlreadyTaken(let username):
+            return "Имя пользователя '\(username)' уже занято"
+        }
+    }
+}
+
 protocol UserStorage {
     func save(_ user: User)
     
@@ -15,4 +29,6 @@ protocol UserStorage {
     func getByUsername(_ username: String) -> User?
     
     func getAllUsers() -> [User]
+    
+    func updateUser(oldUsername: String, newUsername: String, newPassword: String) throws
 }

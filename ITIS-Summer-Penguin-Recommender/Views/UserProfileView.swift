@@ -56,6 +56,12 @@ struct UserProfileView: View {
                     }
                     .padding(.horizontal, geometry.size.width * 0.08)
                     
+                    if let error = viewModel.errorMessage {
+                        Text(error)
+                            .foregroundColor(.red)
+                            .font(.caption)
+                    }
+                    
                     Button(action: saveChanges) {
                         Text("Сохранить")
                             .font(.title2)
@@ -103,7 +109,9 @@ struct UserProfileView: View {
     }
     
     private func saveChanges() {
-        // TODO: реализовать сохранение изменений
+        if let user = viewModel.currentUser {
+            viewModel.updateUser(oldUsername: user.username, newUsername: username, newPassword: password)
+        }
     }
 }
 

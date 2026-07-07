@@ -14,9 +14,7 @@ class UserStorageImpl: UserStorage {
         var users = getAllUsers()
         users.append(user)
         
-        if let data = try? JSONEncoder().encode(users) {
-            UserDefaults.standard.set(data, forKey: usersKey)
-        }
+        updateUserDefaults(users)
     }
     
     func getById(_ id: UUID) -> User? {
@@ -33,5 +31,43 @@ class UserStorageImpl: UserStorage {
             return []
         }
         return users
+    }
+    
+    func updateUser(
+        oldUsername: String,
+        newUsername: String,
+        newPassword: String
+    ) throws {
+        var users = getAllUsers()
+        
+        guard let index = users.firstIndex(where: {
+            $0.username.lowercased() == oldUsername.lowercased()
+        }) else {
+            throw UserStorageError.userNotFound(username: newUsername)
+        }
+        
+        let isNewUsernameTaken = users.contains { user in
+            user.username.lowercased() == newUsername.lowercased() &&
+            user.username.lowercased() != oldUsername.lowercased()
+        }
+        
+        guard !isNewUsernameTaken else {
+            throw UserStorageError.usernameAlreadyTaken(username: newUsername)
+        }
+        
+        var updatedUser = users[index]
+        updatedUser.username = newUsername
+        if newPassword != "" {
+            updatedUser.password = newPassword
+        }
+        users[index] = updatedUser
+        
+        updateUserDefaults(users)
+    }
+    
+    private func updateUserDefaults(_ users: [User]) {
+        if let data = try? JSONEncoder().encode(users) {
+            UserDefaults.standard.set(data, forKey: usersKey)
+        }
     }
 }
