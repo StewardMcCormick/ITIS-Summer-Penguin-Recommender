@@ -20,6 +20,7 @@ struct ContentView: View {
         Group {
             if viewModel.isLoggedIn {
                 QuizView(quizStorage: quizStorage)
+                    .environment(viewModel)
             } else {
                 LoginView(viewModel: viewModel)
             }
