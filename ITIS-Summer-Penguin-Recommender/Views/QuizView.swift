@@ -72,17 +72,15 @@ struct QuizView: View {
                             .foregroundColor(.black)
                         
                         Button(action: {}) {
-                            HStack {
-                                Text("Выбрать фото")
-                            }
-                            .font(.system(size: 16))
-                            .foregroundColor(.black)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color.black, lineWidth: 1.5)
-                            )
+                            Text("Выбрать фото")
+                                .font(.system(size: 16))
+                                .foregroundColor(.black)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(Color.black, lineWidth: 1.5)
+                                )
                         }
                         .padding(.top, 5)
                     }
@@ -106,7 +104,7 @@ struct QuizView: View {
     }
 }
 
-// MARK: блок вопроса
+// MARK: - блок вопроса
 struct QuestionBlock: View {
     let number: Int
     let question: String
@@ -131,8 +129,11 @@ struct QuestionBlock: View {
                         .padding(.horizontal, 16)
                         .background(
                             RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.black, lineWidth: 1.5)
                                 .fill(selectedAnswer?.id == answer.id ? Color.blue.opacity(0.2) : Color.clear)
+                        )
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.black, lineWidth: 1.5)
                         )
                 }
             }
@@ -140,7 +141,7 @@ struct QuestionBlock: View {
     }
 }
 
-// MARK: временная версия экрана истории
+// TODO: реализовать экран истории
 struct HistoryView: View {
     var body: some View {
         Text("История записей")

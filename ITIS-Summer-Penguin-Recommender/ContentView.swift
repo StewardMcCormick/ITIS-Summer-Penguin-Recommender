@@ -12,8 +12,7 @@ struct ContentView: View {
     private let quizStorage: QuizStorage
     
     init() {
-        _viewModel = State(initialValue: AuthViewModelImpl())
-    
+        
         self.quizStorage = JSONQuizStorage(jsonFilename: "quiz")
     }
     
