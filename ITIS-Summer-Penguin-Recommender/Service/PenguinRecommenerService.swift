@@ -32,7 +32,7 @@ class PenguinRecommenerServiceImpl: PenguinRecommenerService {
         self.penguinsBreedsList = penguinsBreedsList
     }
     
-    // MARK: если вернулся nil - подходящего пингвина не нашлось
+    // если вернулся nil - подходящего пингвина не нашлось
     func recommenedPenguin(answers: [QuizAnswer]) -> Breed? {
         let vector = UserVector(
             temp: AnswersVectorUnit(value: answers[0].value, weight: answers[0].weight),
@@ -46,7 +46,7 @@ class PenguinRecommenerServiceImpl: PenguinRecommenerService {
     }
     
     private func getMostSuitableBreed(vector: UserVector) -> Breed? {
-        var filteredBreeds = getFilteredBreedsByHardCondition(vector: vector)
+        let filteredBreeds = getFilteredBreedsByHardCondition(vector: vector)
         
         if filteredBreeds.isEmpty {
             return nil
@@ -81,19 +81,19 @@ class PenguinRecommenerServiceImpl: PenguinRecommenerService {
     private func getFilteredBreedsByHardCondition(vector: UserVector) -> [Breed] {
         return penguinsBreedsList.filter { breed in
             
-            // MARK: не берем арктических пингвинов для людей, живущих в тропиках
+            // не берем арктических пингвинов для людей, живущих в тропиках
             !(vector.temp.value >= 9 && breed.mathParams.temp <= 3) &&
             
-            // MARK: не берем больших пингвинов в маленькое жилье
+            // не берем больших пингвинов в маленькое жилье
             !(vector.space.value <= 2 && breed.mathParams.space >= 5) &&
             
-            // MARK: не выдаем спокойным людям активных пингвинов
+            // не выдаем спокойным людям активных пингвинов
             !(vector.activity.value <= 5 && breed.mathParams.activity >= 5) &&
             
-            // MARK: не отдаем шумных пингвинов людям, любящим тишину
+            // не отдаем шумных пингвинов людям, любящим тишину
             !(vector.noise.value <= 3 && breed.mathParams.noise >= 5) &&
             
-            // MARK: не отдаем социальных пингвинов интровертам
+            // не отдаем социальных пингвинов интровертам
             !(vector.social.value <= 3 && breed.mathParams.social >= 6)
         }
     }

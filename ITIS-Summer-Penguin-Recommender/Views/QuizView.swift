@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct QuizView: View {
-    @State private var selectedAnswers: [String: Answer] = [:]
+    @State private var selectedAnswers: [String: QuizAnswer] = [:]
     private let questions: [Question]
     
-    init(quizStorage: QuizStorage) {
+    private var penguinRecommender: PenguinRecommenerService
+    
+    init(quizStorage: QuizStorage, penguineRecommender: PenguinRecommenerService) {
         self.questions = (try? quizStorage.getAllQuestions()) ?? []
+        self.penguinRecommender = penguineRecommender
     }
     
     var body: some View {
@@ -56,7 +59,14 @@ struct QuizView: View {
                         QuestionBlock(
                             number: index + 1,
                             question: question.question,
-                            answers: question.answers,
+                            answers: question.answers.map { answer in
+                                QuizAnswer(
+                                    id: answer.id,
+                                    label: answer.label,
+                                    value: answer.value,
+                                    weight: answer.weight
+                                )
+                            },
                             selectedAnswer: $selectedAnswers[String(question.id)]
                         )
                     }
@@ -108,8 +118,8 @@ struct QuizView: View {
 struct QuestionBlock: View {
     let number: Int
     let question: String
-    let answers: [Answer]
-    @Binding var selectedAnswer: Answer?
+    let answers: [QuizAnswer]
+    @Binding var selectedAnswer: QuizAnswer?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -151,5 +161,5 @@ struct HistoryView: View {
 }
 
 #Preview {
-    QuizView(quizStorage: JSONQuizStorage(jsonFilename: "quiz"))
+    QuizView(quizStorage: JSONQuizStorage(jsonFilename: "quiz"), penguineRecommender: PenguinRecommenerServiceImpl(penguinsBreedsList: []))
 }
