@@ -10,7 +10,12 @@ import Foundation
 // MARK: - Хранилище истории
 class HistoryStorage {
     
-    private let historyKey = "penguinHistory"
+    private let userId: UUID
+    private var historyKey: String { "penguinHistory_\(userId.uuidString)" }
+        
+    init(userId: UUID) {
+        self.userId = userId
+    }
     
     func save(record: HistoryRecord) {
         var records = getAllRecords()

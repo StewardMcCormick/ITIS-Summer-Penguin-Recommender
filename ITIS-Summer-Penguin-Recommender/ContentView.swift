@@ -12,12 +12,10 @@ struct ContentView: View {
     private let quizStorage: QuizStorage
     private let penguinStorage: PenguinStorage
     private let penguinRecommender: PenguinRecommenerService
-    private let historyStorage: HistoryStorage
     
     init() {
         self.quizStorage = JSONQuizStorage(jsonFilename: "quiz")
         self.penguinStorage = JSONPenguinStorage(jsonFilename: "penguins")
-        self.historyStorage = HistoryStorage()
         self.penguinRecommender = PenguinRecommenerServiceImpl(
             penguinsBreedsList: (try? penguinStorage.getPenguinsData().breeds) ?? []
         )
@@ -25,11 +23,11 @@ struct ContentView: View {
     
     var body: some View {
         Group {
-            if viewModel.isLoggedIn {
+            if viewModel.isLoggedIn, let currentUser = viewModel.currentUser {
                 QuizView(quizStorage: quizStorage,
                          viewModel: viewModel,
                          penguineRecommender: penguinRecommender,
-                         historyStorage: historyStorage
+                         historyStorage: HistoryStorage(userId: currentUser.id)
                 )
             } else {
                 LoginView(viewModel: viewModel)
