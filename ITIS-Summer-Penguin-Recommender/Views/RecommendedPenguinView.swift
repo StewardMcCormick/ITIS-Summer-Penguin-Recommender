@@ -51,7 +51,7 @@ struct SuccesRecommendation: View {
                     .foregroundColor(.black)
                     .multilineTextAlignment(.center)
                 
-                Image("test")
+                Image(currentPenguin.userInfo.imageUrl)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: .infinity)

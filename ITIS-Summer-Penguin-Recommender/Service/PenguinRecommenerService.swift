@@ -32,7 +32,6 @@ class PenguinRecommenerServiceImpl: PenguinRecommenerService {
         self.penguinsBreedsList = penguinsBreedsList
     }
     
-    // если вернулся nil - подходящего пингвина не нашлось
     func recommenedPenguin(answers: [QuizAnswer]) -> Breed? {
         let vector = UserVector(
             temp: AnswersVectorUnit(value: answers[0].value, weight: answers[0].weight),
@@ -81,19 +80,14 @@ class PenguinRecommenerServiceImpl: PenguinRecommenerService {
     private func getFilteredBreedsByHardCondition(vector: UserVector) -> [Breed] {
         return penguinsBreedsList.filter { breed in
             
-            // не берем арктических пингвинов для людей, живущих в тропиках
             !(vector.temp.value >= 9 && breed.mathParams.temp <= 3) &&
             
-            // не берем больших пингвинов в маленькое жилье
             !(vector.space.value <= 2 && breed.mathParams.space >= 5) &&
             
-            // не выдаем спокойным людям активных пингвинов
             !(vector.activity.value <= 5 && breed.mathParams.activity >= 5) &&
             
-            // не отдаем шумных пингвинов людям, любящим тишину
             !(vector.noise.value <= 3 && breed.mathParams.noise >= 5) &&
             
-            // не отдаем социальных пингвинов интровертам
             !(vector.social.value <= 3 && breed.mathParams.social >= 6)
         }
     }
