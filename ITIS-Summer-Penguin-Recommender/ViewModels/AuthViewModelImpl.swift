@@ -22,27 +22,26 @@ class AuthViewModelImpl: AuthViewModel {
         checkCurrentUser()
     }
     
-    func login(username: String, password: String) -> Bool {
+    func login(username: String, password: String) {
         guard !username.isEmpty, !password.isEmpty else {
             errorMessage = "Заполните все поля"
-            return false
+            return
         }
         
         guard let user = storage.getByUsername(username) else {
             errorMessage = "Пользователь не найден"
-            return false
+            return
         }
         
         guard user.password == password else {
             errorMessage = "Неверный пароль"
-            return false
+            return
         }
         
         currentUser = user
         isLoggedIn = true
         saveCurrentUser()
         errorMessage = nil
-        return true
     }
     
     func register(username: String, password: String, repeatedPassword: String) -> Bool {
@@ -72,6 +71,21 @@ class AuthViewModelImpl: AuthViewModel {
         currentUser = nil
         isLoggedIn = false
         UserDefaults.standard.removeObject(forKey: currentUserKey)
+    }
+    
+    func updateUser(oldUsername: String, newUsername: String, newPassword: String) -> Bool {
+        do {
+            try storage.updateUser(oldUsername: oldUsername, newUsername: newUsername, newPassword: newPassword)
+            
+            currentUser?.username = newUsername
+            if newPassword != "" {
+                currentUser?.password = newPassword
+            }
+            return true
+        } catch {
+            errorMessage = error.localizedDescription
+            return false
+        }
     }
     
     //проверка авторизации

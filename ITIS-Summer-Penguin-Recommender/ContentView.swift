@@ -19,7 +19,7 @@ struct ContentView: View {
     var body: some View {
         Group {
             if viewModel.isLoggedIn {
-                QuizView(quizStorage: quizStorage)
+                QuizView(quizStorage: quizStorage, viewModel: viewModel)
             } else {
                 LoginView(viewModel: viewModel)
             }
