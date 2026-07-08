@@ -14,8 +14,10 @@ enum QuizTab: String, CaseIterable {
 
 struct QuizView: View {
     @State private var selectedAnswers: [String: QuizAnswer] = [:]
+    @State private var historyRecords: [HistoryRecord] = []
     
     private var penguinRecommender: PenguinRecommenerService
+    private let historyStorage: HistoryStorage
     
     private var viewModel: AuthViewModel
     @State private var selectedTab: QuizTab = .quiz
@@ -24,10 +26,12 @@ struct QuizView: View {
     @State private var recommendedBreed: Breed? = nil
     private let questions: [Question]
     
-    init(quizStorage: QuizStorage, viewModel: AuthViewModel, penguineRecommender: PenguinRecommenerService) {
+    init(quizStorage: QuizStorage, viewModel: AuthViewModel, penguineRecommender: PenguinRecommenerService, historyStorage: HistoryStorage) {
         self.questions = (try? quizStorage.getAllQuestions()) ?? []
         self.viewModel = viewModel
         self.penguinRecommender = penguineRecommender
+        self.historyStorage = historyStorage
+        self._historyRecords = State(initialValue: historyStorage.getAllRecords())
     }
     
     var body: some View {
@@ -157,8 +161,22 @@ struct QuizView: View {
                 
                 Button(action: {
                     recommendedBreed = penguinRecommender.recommenedPenguin(
-                        answers: selectedAnswers.map { $0.value }
+                        answers: Array(selectedAnswers.values)
                     )
+                    
+                    if let breed = recommendedBreed {
+                        let record = HistoryRecord(
+                            breedId: breed.id,
+                            breedName: breed.name,
+                            userAnswers: Dictionary(uniqueKeysWithValues:
+                                selectedAnswers.map { ($0.key, $0.value.value) }
+                            )
+                        )
+                        historyStorage.save(record: record)
+                        
+                        historyRecords = historyStorage.getAllRecords()
+                    }
+                    
                     isResultShows = true
                 }) {
                     Text("Дай Пингвина!")
@@ -180,14 +198,59 @@ struct QuizView: View {
     private var historyContent: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 25) {
-                Text("История записей")
-                    .font(.system(size: 36, weight: .bold))
-                    .padding(.top, 10)
+                HStack {
+                    Text("История записей")
+                        .font(.system(size: 36, weight: .bold))
+                    
+                    Spacer()
+                    
+                    if !historyRecords.isEmpty {
+                        Button(action: {
+                            historyStorage.clearAll()
+                            historyRecords = []
+                        }) {
+                            Image(systemName: "trash")
+                                .foregroundColor(.red)
+                                .padding(8)
+                                .background(Color.red.opacity(0.1))
+                                .clipShape(Circle())
+                        }
+                    }
+                }
+                .padding(.top, 10)
                 
-                // TODO: добавить список результатов
-                Text("Список предыдущих результатов появится здесь.")
-                    .font(.system(size: 16))
-                    .foregroundColor(.gray)
+                if historyRecords.isEmpty {
+                    Text("Вы еще не подбирали пингвина.")
+                        .foregroundColor(.gray)
+                        .padding(.top, 20)
+                } else {
+                    ForEach(historyRecords) { record in
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(record.breedName).font(.headline)
+                                Text(record.date.formatted(date: .abbreviated, time: .omitted))
+                                    .font(.caption).foregroundColor(.gray)
+                            }
+                            
+                            Spacer()
+                            
+                            Button(action: {
+                                historyStorage.deleteRecord(id: record.id)
+                                
+                                historyRecords = historyStorage.getAllRecords()
+                                
+                            }) {
+                                Image(systemName: "xmark.circle.fill")
+                                    .foregroundColor(.red.opacity(0.7))
+                                    .font(.title3)
+                            }
+                        }
+                        .padding()
+                        .background(Color.gray.opacity(0.1))
+                        .cornerRadius(10)
+                        Divider()
+                    }
+                }
             }
             .padding(.horizontal, 20)
         }
@@ -235,6 +298,7 @@ struct QuestionBlock: View {
     QuizView(
         quizStorage: JSONQuizStorage(jsonFilename: "quiz"),
         viewModel: AuthViewModelImpl(),
-        penguineRecommender: PenguinRecommenerServiceImpl(penguinsBreedsList: [])
+        penguineRecommender: PenguinRecommenerServiceImpl(penguinsBreedsList: []),
+        historyStorage: HistoryStorage()
     )
 }
