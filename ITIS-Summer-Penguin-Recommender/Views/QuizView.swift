@@ -13,17 +13,23 @@ enum QuizTab: String, CaseIterable {
 }
 
 struct QuizView: View {
+    @State private var selectedAnswers: [String: QuizAnswer] = [:]
+    
+    private var penguinRecommender: PenguinRecommenerService
+    
     private var viewModel: AuthViewModel
-    @State private var selectedAnswers: [String: Answer] = [:]
     @State private var selectedTab: QuizTab = .quiz
     @State private var isProfileShows: Bool = false
+    @State private var isResultShows: Bool = false
+    @State private var recommendedBreed: Breed? = nil
     private let questions: [Question]
-
-    init(quizStorage: QuizStorage, viewModel: AuthViewModel) {
+    
+    init(quizStorage: QuizStorage, viewModel: AuthViewModel, penguineRecommender: PenguinRecommenerService) {
         self.questions = (try? quizStorage.getAllQuestions()) ?? []
         self.viewModel = viewModel
+        self.penguinRecommender = penguineRecommender
     }
-
+    
     var body: some View {
         VStack(spacing: 0) {
             topTabBar
@@ -40,8 +46,11 @@ struct QuizView: View {
         .sheet(isPresented: $isProfileShows) {
             UserProfileView(viewModel: viewModel)
         }
+        .sheet(isPresented: $isResultShows) {
+            RecommendedPenguinView(currentBreed: recommendedBreed)
+        }
     }
-
+    
     // MARK: - Кастомная панель табов
     private var topTabBar: some View {
         HStack(spacing: 0) {
@@ -59,9 +68,9 @@ struct QuizView: View {
             }
             .padding(.leading, 8)
             .buttonStyle(PlainButtonStyle())
-
+            
             Spacer()
-
+            
             ForEach(QuizTab.allCases, id: \.self) { tab in
                 Button(action: {
                     withAnimation(.easeInOut(duration: 0.2)) {
@@ -74,7 +83,7 @@ struct QuizView: View {
                             .foregroundColor(selectedTab == tab ? .black : .gray)
                             .padding(.horizontal, 20)
                             .padding(.vertical, 8)
-
+                        
                         Rectangle()
                             .fill(selectedTab == tab ? Color.blue : Color.clear)
                             .frame(height: 3)
@@ -87,7 +96,7 @@ struct QuizView: View {
                 }
                 .buttonStyle(PlainButtonStyle())
             }
-
+            
             Spacer()
                 .frame(width: 48)
         }
@@ -96,36 +105,42 @@ struct QuizView: View {
         .padding(.bottom, 4)
         .background(Color.white.shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 2))
     }
-
+    
     // MARK: - Контент анкеты
     private var quizContent: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 25) {
-                 Text("Отвечай честно! 🤨")
-                     .font(.system(size: 30, weight: .bold))
-                     .padding(.top, 40)
-
+                Text("Отвечай честно! 🤨")
+                    .font(.system(size: 30, weight: .bold))
+                    .padding(.top, 40)
+                
                 ForEach(Array(questions.enumerated()), id: \.element.id) { index, question in
                     QuestionBlock(
                         number: index + 1,
                         question: question.question,
-                        answers: question.answers,
+                        answers: question.answers.map { answer in
+                            QuizAnswer(
+                                id: answer.id,
+                                label: answer.label,
+                                value: answer.value,
+                                weight: answer.weight
+                            )
+                        },
                         selectedAnswer: $selectedAnswers[String(question.id)]
                     )
                 }
-
+                
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Загрузить фото")
                         .font(.system(size: 20, weight: .bold))
                         .foregroundColor(.blue)
                         .padding(.top, 10)
-
+                    
                     Text("*для определения внешнего сходства с пингвином")
                         .font(.system(size: 14))
-                        .foregroundColor(.black)
-
+                    
                     Button(action: {
-                        // TODO: реализовать загрузку фото
+                        // TODO: реализовать загрузить фото
                     }) {
                         Text("Выбрать фото")
                             .font(.system(size: 16))
@@ -139,9 +154,12 @@ struct QuizView: View {
                     }
                     .padding(.top, 5)
                 }
-
+                
                 Button(action: {
-                    // TODO: реализовать подбор пингвина
+                    recommendedBreed = penguinRecommender.recommenedPenguin(
+                        answers: selectedAnswers.map { $0.value }
+                    )
+                    isResultShows = true
                 }) {
                     Text("Дай Пингвина!")
                         .font(.system(size: 24, weight: .bold))
@@ -157,7 +175,7 @@ struct QuizView: View {
             .padding(.horizontal, 20)
         }
     }
-
+    
     // MARK: - Контент истории
     private var historyContent: some View {
         ScrollView {
@@ -165,7 +183,7 @@ struct QuizView: View {
                 Text("История записей")
                     .font(.system(size: 36, weight: .bold))
                     .padding(.top, 10)
-
+                
                 // TODO: добавить список результатов
                 Text("Список предыдущих результатов появится здесь.")
                     .font(.system(size: 16))
@@ -180,15 +198,15 @@ struct QuizView: View {
 struct QuestionBlock: View {
     let number: Int
     let question: String
-    let answers: [Answer]
-    @Binding var selectedAnswer: Answer?
-
+    let answers: [QuizAnswer]
+    @Binding var selectedAnswer: QuizAnswer?
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("\(number). \(question)")
                 .font(.system(size: 20, weight: .bold))
                 .padding(.top, 10)
-
+            
             ForEach(answers, id: \.id) { answer in
                 Button(action: {
                     selectedAnswer = answer
@@ -214,5 +232,9 @@ struct QuestionBlock: View {
 }
 
 #Preview {
-    QuizView(quizStorage: JSONQuizStorage(jsonFilename: "quiz"), viewModel: AuthViewModelImpl())
+    QuizView(
+        quizStorage: JSONQuizStorage(jsonFilename: "quiz"),
+        viewModel: AuthViewModelImpl(),
+        penguineRecommender: PenguinRecommenerServiceImpl(penguinsBreedsList: [])
+    )
 }

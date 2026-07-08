@@ -10,16 +10,24 @@ import SwiftUI
 struct ContentView: View {
     @State private var viewModel = AuthViewModelImpl()
     private let quizStorage: QuizStorage
+    private let penguinStorage: PenguinStorage
+    private let penguinRecommender: PenguinRecommenerService
     
     init() {
-        
         self.quizStorage = JSONQuizStorage(jsonFilename: "quiz")
+        self.penguinStorage = JSONPenguinStorage(jsonFilename: "penguins")
+        self.penguinRecommender = PenguinRecommenerServiceImpl(
+            penguinsBreedsList: (try? penguinStorage.getPenguinsData().breeds) ?? []
+        )
     }
     
     var body: some View {
         Group {
             if viewModel.isLoggedIn {
-                QuizView(quizStorage: quizStorage, viewModel: viewModel)
+                QuizView(quizStorage: quizStorage,
+                         viewModel: viewModel,
+                         penguineRecommender: penguinRecommender
+                )
             } else {
                 LoginView(viewModel: viewModel)
             }
