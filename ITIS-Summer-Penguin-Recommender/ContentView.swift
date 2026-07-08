@@ -11,10 +11,14 @@ struct ContentView: View {
     @State private var viewModel = AuthViewModelImpl()
     private let quizStorage: QuizStorage
     private let penguinStorage: PenguinStorage
+    private let penguinRecommender: PenguinRecommenerService
     
     init() {
         self.quizStorage = JSONQuizStorage(jsonFilename: "quiz")
         self.penguinStorage = JSONPenguinStorage(jsonFilename: "penguins")
+        self.penguinRecommender = PenguinRecommenerServiceImpl(
+            penguinsBreedsList: (try? penguinStorage.getPenguinsData().breeds) ?? []
+        )
     }
     
     var body: some View {
@@ -22,9 +26,7 @@ struct ContentView: View {
             if viewModel.isLoggedIn {
                 QuizView(quizStorage: quizStorage,
                          viewModel: viewModel,
-                         penguineRecommender: PenguinRecommenerServiceImpl(
-                            penguinsBreedsList: (try? penguinStorage.getPenguinsData().breeds) ?? []
-                         )
+                         penguineRecommender: penguinRecommender
                 )
             } else {
                 LoginView(viewModel: viewModel)

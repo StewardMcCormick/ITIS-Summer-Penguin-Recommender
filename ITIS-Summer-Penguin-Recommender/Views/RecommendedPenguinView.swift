@@ -58,29 +58,19 @@ struct SuccesRecommendation: View {
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .padding(.horizontal, 16)
                 
-                VStack(alignment: .leading, spacing: 0) {
-                    InfoRow(title: "По-научному🧐: ", value: currentPenguin.userInfo.scientificName)
-                    Divider().padding(.vertical, 6)
-                    InfoRow(title: "Размер📏: ", value: currentPenguin.userInfo.size)
-                    Divider().padding(.vertical, 6)
-                    InfoRow(title: "Средний рост🐧: ", value: "\(currentPenguin.userInfo.heightCm) см")
-                    Divider().padding(.vertical, 6)
-                    InfoRow(title: "Средний вес🏋️‍♂️: ", value: String(format: "%.2f кг", currentPenguin.userInfo.weightKg))
-                    Divider().padding(.vertical, 6)
-                    InfoRow(title: "Продолжительность жизни⏳: ", value: getLifespanString(years: currentPenguin.userInfo.lifespanYears))
-                    Divider().padding(.vertical, 6)
-                    InfoRow(title: "Короткое описание📕: ", value: currentPenguin.userInfo.description)
-                    Divider().padding(.vertical, 6)
-                    InfoRow(title: "Важные моменты❗️: ", value: currentPenguin.userInfo.careTips)
-                    Divider().padding(.vertical, 6)
-                    InfoRow(title: "Питание🐟: ", value: currentPenguin.userInfo.diet)
-                    Divider().padding(.vertical, 6)
-                    InfoRow(title: "Интересный факт🤓: ", value: currentPenguin.userInfo.funFact)
-                }
-                .padding(.horizontal, 16)
+                PenguinInformationView(infoRows: [
+                    InfoRow(title: "По-научному🧐: ", value: currentPenguin.userInfo.scientificName),
+                    InfoRow(title: "Размер📏: ", value: currentPenguin.userInfo.size),
+                    InfoRow(title: "Средний рост🐧: ", value: "\(currentPenguin.userInfo.heightCm) см"),
+                    InfoRow(title: "Средний вес🏋️‍♂️: ", value: String(format: "%.2f кг", currentPenguin.userInfo.weightKg)),
+                    InfoRow(title: "Продолжительность жизни⏳: ", value: getLifespanString(years: currentPenguin.userInfo.lifespanYears)),
+                    InfoRow(title: "Короткое описание📕: ", value: currentPenguin.userInfo.description),
+                    InfoRow(title: "Важные моменты❗️: ", value: currentPenguin.userInfo.careTips),
+                    InfoRow(title: "Питание🐟: ", value: currentPenguin.userInfo.diet),
+                    InfoRow(title: "Интересный факт🤓: ", value: currentPenguin.userInfo.funFact),
+                ])
             }
         }
-        // Spacer() удалён – ScrollView занимает только своё содержимое
     }
 }
 
@@ -120,6 +110,18 @@ struct InfoRow: View {
                 .multilineTextAlignment(.leading)
         }
         .padding(4)
+        Divider().padding(.vertical, 6)
+    }
+}
+
+struct PenguinInformationView: View {
+    var infoRows: [InfoRow]
+    
+    var body: some View {
+        ForEach(infoRows.indices, id: \.self) { idx in
+            infoRows[idx]
+        }
+        .padding(.horizontal, 16)
     }
 }
 
