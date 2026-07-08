@@ -20,6 +20,8 @@ struct QuizView: View {
     private var viewModel: AuthViewModel
     @State private var selectedTab: QuizTab = .quiz
     @State private var isProfileShows: Bool = false
+    @State private var isResultShows: Bool = false
+    @State private var recommendedBreed: Breed? = nil
     private let questions: [Question]
     
     init(quizStorage: QuizStorage, viewModel: AuthViewModel, penguineRecommender: PenguinRecommenerService) {
@@ -43,6 +45,9 @@ struct QuizView: View {
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $isProfileShows) {
             UserProfileView(viewModel: viewModel)
+        }
+        .sheet(isPresented: $isResultShows) {
+            RecommendedPenguinView(currentBreed: recommendedBreed)
         }
     }
     
@@ -135,7 +140,7 @@ struct QuizView: View {
                         .font(.system(size: 14))
                     
                     Button(action: {
-                        // TODO: реализовать загрузку фото
+                        // TODO: реализовать загрузить фото
                     }) {
                         Text("Выбрать фото")
                             .font(.system(size: 16))
@@ -151,7 +156,10 @@ struct QuizView: View {
                 }
                 
                 Button(action: {
-                    // TODO: реализовать подбор пингвина
+                    recommendedBreed = penguinRecommender.recommenedPenguin(
+                        answers: selectedAnswers.map { $0.value }
+                    )
+                    isResultShows = true
                 }) {
                     Text("Дай Пингвина!")
                         .font(.system(size: 24, weight: .bold))
