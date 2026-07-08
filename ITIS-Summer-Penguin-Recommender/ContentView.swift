@@ -21,6 +21,7 @@ struct ContentView: View {
         Group {
             if viewModel.isLoggedIn {
                 QuizView(quizStorage: quizStorage,
+                         viewModel: viewModel,
                          penguineRecommender: PenguinRecommenerServiceImpl(
                             penguinsBreedsList: (try? penguinStorage.getPenguinsData().breeds) ?? []
                          )

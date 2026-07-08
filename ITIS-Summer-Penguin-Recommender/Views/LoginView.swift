@@ -81,7 +81,7 @@ struct LoginView: View {
                 isRegistering = false
             }
         } else {
-            _ = viewModel.login(username: username, password: password)
+            viewModel.login(username: username, password: password)
         }
     }
 }
