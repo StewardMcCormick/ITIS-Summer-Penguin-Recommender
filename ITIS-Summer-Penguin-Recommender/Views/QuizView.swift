@@ -23,7 +23,6 @@ struct QuizView: View {
     private var viewModel: AuthViewModel
     @State private var selectedTab: QuizTab = .quiz
     @State private var isProfileShows: Bool = false
-    @State private var isResultShows: Bool = false
     @State private var recommendedBreed: Breed? = nil
     private let questions: [Question]
     
@@ -65,8 +64,8 @@ struct QuizView: View {
         .sheet(isPresented: $isProfileShows) {
             UserProfileView(viewModel: viewModel)
         }
-        .sheet(isPresented: $isResultShows) {
-            RecommendedPenguinView(currentBreed: recommendedBreed)
+        .sheet(item: $recommendedBreed) { breed in
+            RecommendedPenguinView(currentBreed: breed)
         }
     }
     
@@ -175,22 +174,34 @@ struct QuizView: View {
                 }
                 
                 Button(action: {
-                    recommendedBreed = penguinRecommender.recommenedPenguin(
-                        answers: Array(selectedAnswers.values)
+                    let sortedAnswers = questions.compactMap { question in
+                        selectedAnswers[String(question.id)]
+                    }
+                    
+                    let breed = penguinRecommender.recommenedPenguin(
+                        answers: sortedAnswers
                     )
-                                    
-                    if let breed = recommendedBreed {
-                        let record = HistoryRecord(
+                    
+                    let record: HistoryRecord
+                    if let breed = breed {
+                        record = HistoryRecord(
+                            isPenguinRecommended: true,
                             breedId: breed.id,
                             breedName: breed.name,
                             userAnswers: Dictionary(uniqueKeysWithValues:
                                 selectedAnswers.map { ($0.key, $0.value.value) }
                             )
                         )
-                        historyStorage.save(record: record)
-                        historyRecords = historyStorage.getAllRecords()
-                        isResultShows = true
+                    } else {
+                        record = HistoryRecord(
+                            isPenguinRecommended: false, breedId: 0, breedName: "", userAnswers: [:]
+                        )
                     }
+                    
+                    historyStorage.save(record: record)
+                    historyRecords = historyStorage.getAllRecords()
+                    
+                    recommendedBreed = breed
                 }) {
                     Text("Дай Пингвина!")
                         .font(.system(size: 24, weight: .bold))
@@ -229,17 +240,24 @@ struct QuizView: View {
                 } else {
                     ForEach(filteredRecords) { record in
                         HStack {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(record.breedName).font(.headline)
+                            VStack(alignment: .leading, spacing: 8) {
+                                if record.isPenguinRecommended {
+                                    Text(record.breedName)
+                                        .font(.headline)
+                                } else {
+                                    Text("Подобрать пингвина не удалось")
+                                        .font(.headline)
+                                        .foregroundColor(.secondary)
+                                }
                                 Text(record.date.formatted(date: .abbreviated, time: .omitted))
-                                    .font(.caption).foregroundColor(.gray)
+                                    .font(.caption)
+                                    .foregroundColor(.gray)
                             }
                             Spacer()
                         }
-                        .listRowSeparator(.hidden)
+                        .padding(.vertical, 8)
                         .listRowBackground(Color.clear)
                     }
-                        
                     .onDelete(perform: deleteHistoryRecord)
                 }
             }

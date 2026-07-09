@@ -10,7 +10,7 @@ struct PenguinsData: Decodable {
 }
 
 // MARK: - Порода
-struct Breed: Decodable, Equatable, Hashable {
+struct Breed: Decodable, Equatable, Hashable, Identifiable {
     let id: Int
     let name: String
     let mathParams: MathParams
