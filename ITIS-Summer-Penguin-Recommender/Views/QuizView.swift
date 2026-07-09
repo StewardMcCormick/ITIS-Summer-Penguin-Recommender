@@ -28,7 +28,7 @@ struct QuizView: View {
     private let questions: [Question]
     
     private var isAllQuestionsAnswered: Bool {
-        questions.count == selectedAnswers.count
+        !questions.isEmpty && questions.count == selectedAnswers.count
     }
         
     private var filteredRecords: [HistoryRecord] {
@@ -36,7 +36,7 @@ struct QuizView: View {
             return historyRecords
         } else {
             return historyRecords.filter {
-                $0.breedName.localizedCaseInsensitiveContains(searchText)
+                ($0.breedName ?? "").localizedCaseInsensitiveContains(searchText)
             }
         }
     }
@@ -179,16 +179,17 @@ struct QuizView: View {
                         answers: Array(selectedAnswers.values)
                     )
                                     
-                    if let breed = recommendedBreed {
-                        let record = HistoryRecord(
-                            breedId: breed.id,
-                            breedName: breed.name,
-                            userAnswers: Dictionary(uniqueKeysWithValues:
-                                selectedAnswers.map { ($0.key, $0.value.value) }
-                            )
+                    let record = HistoryRecord(
+                        breedId: recommendedBreed?.id,
+                        breedName: recommendedBreed?.name,
+                        userAnswers: Dictionary(uniqueKeysWithValues:
+                            selectedAnswers.map { ($0.key, $0.value.value) }
                         )
-                        historyStorage.save(record: record)
-                        historyRecords = historyStorage.getAllRecords()
+                    )
+                    historyStorage.save(record: record)
+                    historyRecords = historyStorage.getAllRecords()
+                        
+                    if recommendedBreed != nil {
                         isResultShows = true
                     }
                 }) {
@@ -230,7 +231,7 @@ struct QuizView: View {
                     ForEach(filteredRecords) { record in
                         HStack {
                             VStack(alignment: .leading, spacing: 4) {
-                                Text(record.breedName).font(.headline)
+                                Text(record.breedName ?? "Пингвин не найден").font(.headline)
                                 Text(record.date.formatted(date: .abbreviated, time: .omitted))
                                     .font(.caption).foregroundColor(.gray)
                             }

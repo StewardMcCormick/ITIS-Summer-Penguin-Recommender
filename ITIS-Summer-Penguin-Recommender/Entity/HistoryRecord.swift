@@ -11,15 +11,15 @@ import Foundation
 struct HistoryRecord: Codable, Identifiable {
     let id: UUID
     let date: Date
-    let breedId: Int
-    let breedName: String
+    let breedId: Int?
+    let breedName: String?
     let userAnswers: [String: Int]
     
     init(
         id: UUID = UUID(),
         date: Date = Date(),
-        breedId: Int,
-        breedName: String,
+        breedId: Int?,
+        breedName: String?,
         userAnswers: [String: Int]
     ) {
         self.id = id
