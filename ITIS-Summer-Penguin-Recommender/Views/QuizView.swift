@@ -27,7 +27,7 @@ struct QuizView: View {
     private let questions: [Question]
     
     private var isAllQuestionsAnswered: Bool {
-        questions.count == selectedAnswers.count
+        !questions.isEmpty && questions.count == selectedAnswers.count
     }
         
     private var filteredRecords: [HistoryRecord] {
@@ -35,7 +35,7 @@ struct QuizView: View {
             return historyRecords
         } else {
             return historyRecords.filter {
-                $0.breedName.localizedCaseInsensitiveContains(searchText)
+                $0.recordTitle.localizedCaseInsensitiveContains(searchText)
             }
         }
     }
@@ -187,14 +187,17 @@ struct QuizView: View {
                         record = HistoryRecord(
                             isPenguinRecommended: true,
                             breedId: breed.id,
-                            breedName: breed.name,
+                            recordTitle: breed.name,
                             userAnswers: Dictionary(uniqueKeysWithValues:
                                 selectedAnswers.map { ($0.key, $0.value.value) }
                             )
                         )
                     } else {
                         record = HistoryRecord(
-                            isPenguinRecommended: false, breedId: 0, breedName: "", userAnswers: [:]
+                            isPenguinRecommended: false,
+                            breedId: nil,
+                            recordTitle: "Подобрать пингвина не удалось",
+                            userAnswers: Dictionary(uniqueKeysWithValues: selectedAnswers.map { ($0.key, $0.value.value) })
                         )
                     }
                     
@@ -241,14 +244,8 @@ struct QuizView: View {
                     ForEach(filteredRecords) { record in
                         HStack {
                             VStack(alignment: .leading, spacing: 8) {
-                                if record.isPenguinRecommended {
-                                    Text(record.breedName)
-                                        .font(.headline)
-                                } else {
-                                    Text("Подобрать пингвина не удалось")
-                                        .font(.headline)
-                                        .foregroundColor(.secondary)
-                                }
+                                Text(record.recordTitle)
+                                    .font(.headline)
                                 Text(record.date.formatted(date: .abbreviated, time: .omitted))
                                     .font(.caption)
                                     .foregroundColor(.gray)
