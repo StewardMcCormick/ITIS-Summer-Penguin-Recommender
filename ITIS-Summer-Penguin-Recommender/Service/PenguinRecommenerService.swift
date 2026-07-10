@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import SwiftUI
 
 protocol PenguinRecommenerService {
     func recommenedPenguin(answers: [QuizAnswer]) -> Breed?
+    func setUserPhoto(photo: Data)
 }
 
 struct AnswersVectorUnit {
@@ -26,9 +28,12 @@ struct UserVector {
 
 class PenguinRecommenerServiceImpl: PenguinRecommenerService {
     
+    private let userPhotoAnalizeService: UserPhotoAnalizeService
     private let penguinsBreedsList: [Breed]
+    private var userPhoto: Data? = nil
     
-    init(penguinsBreedsList: [Breed]) {
+    init(userPhotoAnalizeService: UserPhotoAnalizeService, penguinsBreedsList: [Breed]) {
+        self.userPhotoAnalizeService = userPhotoAnalizeService
         self.penguinsBreedsList = penguinsBreedsList
     }
     
@@ -41,10 +46,30 @@ class PenguinRecommenerServiceImpl: PenguinRecommenerService {
             social: AnswersVectorUnit(value: answers[4].value, weight: answers[4].weight)
         )
         
-        return getMostSuitableBreed(vector: vector)
+        if let userPhoto = userPhoto {
+            return getMostSuitableBreedWithPhoto(vector: vector, photo: userPhoto)
+        }
+        
+        return getMostSuitableBreedWithoutPhoto(vector: vector)
     }
     
-    private func getMostSuitableBreed(vector: UserVector) -> Breed? {
+    func setUserPhoto(photo: Data) {
+        userPhoto = photo
+    }
+    
+    private func getMostSuitableBreedWithPhoto(vector: UserVector, photo: Data) -> Breed? {
+        let breedWithoutPhoto = getMostSuitableBreedWithoutPhoto(vector: vector)
+        if let breedWithoutPhoto = breedWithoutPhoto {
+            return PenguinComparisonService.compareCritical(
+                breedFromQuiz: breedWithoutPhoto,
+                breedFromPhoto: userPhotoAnalizeService.analize(photo: photo)
+            )
+        }
+        
+        return nil
+    }
+    
+    private func getMostSuitableBreedWithoutPhoto(vector: UserVector) -> Breed? {
         let filteredBreeds = getFilteredBreedsByHardCondition(vector: vector)
         
         if filteredBreeds.isEmpty {
@@ -90,5 +115,38 @@ class PenguinRecommenerServiceImpl: PenguinRecommenerService {
             
             !(vector.social.value <= 2 && breed.mathParams.social >= 8)
         }
+    }
+}
+
+
+// MARK: - Сервис сравнения (только критические параметры)
+class PenguinComparisonService {
+    
+    private static let similarityThreshold: Double = 70.0
+    
+    private static let criticalWeights: [String: Double] = [
+        "temp": 1.0,
+        "space": 1.0
+    ]
+    
+    static func compareCritical(breedFromQuiz: Breed, breedFromPhoto: Breed) -> Breed {
+        let diffTemp = Double(abs(breedFromQuiz.mathParams.temp - breedFromPhoto.mathParams.temp))
+        let diffSpace = Double(abs(breedFromQuiz.mathParams.space - breedFromPhoto.mathParams.space))
+        
+        let maxDiff = 10.0
+        
+        let similarityTemp = max(0, 100 - (diffTemp / maxDiff) * 100) * criticalWeights["temp"]!
+        let similaritySpace = max(0, 100 - (diffSpace / maxDiff) * 100) * criticalWeights["space"]!
+        
+        let totalWeight = criticalWeights.values.reduce(0, +)
+        let totalSimilarity = (similarityTemp + similaritySpace) / totalWeight
+        
+        let isSimilar = totalSimilarity >= similarityThreshold
+        
+        if totalSimilarity >= similarityThreshold {
+            return breedFromPhoto
+        }
+        
+        return breedFromQuiz
     }
 }
