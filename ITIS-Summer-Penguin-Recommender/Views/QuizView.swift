@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import PhotosUI
+import UIKit
 
 enum QuizTab: String, CaseIterable {
     case quiz = "Анкета"
@@ -25,6 +27,10 @@ struct QuizView: View {
     @State private var isProfileShows: Bool = false
     @State private var recommendedBreed: Breed? = nil
     private let questions: [Question]
+    
+    // Фото, выбранное пользователем
+    @State private var selectedItem: PhotosPickerItem? = nil
+    @State private var selectedPhoto: Data? = nil
     
     private var isAllQuestionsAnswered: Bool {
         !questions.isEmpty && questions.count == selectedAnswers.count
@@ -148,30 +154,7 @@ struct QuizView: View {
                     )
                 }
                 
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Загрузить фото")
-                        .font(.system(size: 20, weight: .bold))
-                        .foregroundColor(.blue)
-                        .padding(.top, 10)
-                    
-                    Text("*для определения внешнего сходства с пингвином")
-                        .font(.system(size: 14))
-                    
-                    Button(action: {
-                        // TODO: реализовать загрузить фото
-                    }) {
-                        Text("Выбрать фото")
-                            .font(.system(size: 16))
-                            .foregroundColor(.black)
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color.black, lineWidth: 1.5)
-                            )
-                    }
-                    .padding(.top, 5)
-                }
+                photoSelectionBlock
                 
                 Button(action: {
                     let sortedAnswers = questions.compactMap { question in
@@ -219,6 +202,64 @@ struct QuizView: View {
                 .padding(.bottom, 40)
             }
             .padding(.horizontal, 20)
+        }
+    }
+    
+    // MARK: - Блок выбора фото
+    private var photoSelectionBlock: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 6) {
+                Text("Загрузить фото")
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundColor(.blue)
+                if selectedPhoto != nil {
+                    Image(systemName: "checkmark.circle.fill")
+                        .foregroundColor(.green.opacity(0.8))
+                        .font(.system(size: 18))
+                }
+            }
+            .padding(.top, 10)
+            
+            Text("*для определения внешнего сходства с пингвином, но это необязательно😉")
+                .font(.system(size: 14))
+            
+            PhotosPicker(selection: $selectedItem, matching: .images) {
+                Text(selectedPhoto != nil ? "Изменить фото" : "Выбрать фото")
+                    .font(.system(size: 16))
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.black, lineWidth: 1.5)
+                    )
+            }
+            .onChange(of: selectedItem) { newItem in
+                Task {
+                    if let photo = try? await newItem?.loadTransferable(type: Data.self) {
+                        selectedPhoto = photo
+                        penguinRecommender.setUserPhoto(photo: photo)
+                    } else {
+                        selectedPhoto = nil
+                    }
+                }
+            }
+            .padding(.top, 5)
+            
+            if selectedPhoto != nil {
+                Button {
+                    selectedItem = nil
+                    selectedPhoto = nil
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: "xmark.circle")
+                        Text("Отменить выбор")
+                    }
+                    .font(.system(size: 15))
+                    .foregroundColor(.red)
+                    .padding(.vertical, 8)
+                }
+            }
         }
     }
     
@@ -314,7 +355,10 @@ struct QuestionBlock: View {
     QuizView(
         quizStorage: JSONQuizStorage(jsonFilename: "quiz"),
         viewModel: AuthViewModelImpl(),
-        penguineRecommender: PenguinRecommenerServiceImpl(penguinsBreedsList: []),
+        penguineRecommender: PenguinRecommenerServiceImpl(
+            userPhotoAnalizeService: RandomUserPhotoAnalizeService(penguinsBreedsList: []),
+            penguinsBreedsList: []
+        ),
         historyStorage: HistoryStorage(userId: UUID())
     )
 }

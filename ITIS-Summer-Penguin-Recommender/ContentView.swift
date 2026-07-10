@@ -16,8 +16,12 @@ struct ContentView: View {
     init() {
         self.quizStorage = JSONQuizStorage(jsonFilename: "quiz")
         self.penguinStorage = JSONPenguinStorage(jsonFilename: "penguins")
+        
+        let penguins = (try? penguinStorage.getPenguinsData().breeds) ?? []
+        
         self.penguinRecommender = PenguinRecommenerServiceImpl(
-            penguinsBreedsList: (try? penguinStorage.getPenguinsData().breeds) ?? []
+            userPhotoAnalizeService: RandomUserPhotoAnalizeService(penguinsBreedsList: penguins),
+            penguinsBreedsList: penguins
         )
     }
     
