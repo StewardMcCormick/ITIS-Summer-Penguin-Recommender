@@ -140,9 +140,7 @@ class PenguinComparisonService {
         
         let totalWeight = criticalWeights.values.reduce(0, +)
         let totalSimilarity = (similarityTemp + similaritySpace) / totalWeight
-        
-        let isSimilar = totalSimilarity >= similarityThreshold
-        
+                
         if totalSimilarity >= similarityThreshold {
             return breedFromPhoto
         }
