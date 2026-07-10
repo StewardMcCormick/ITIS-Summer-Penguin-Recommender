@@ -80,15 +80,15 @@ class PenguinRecommenerServiceImpl: PenguinRecommenerService {
     private func getFilteredBreedsByHardCondition(vector: UserVector) -> [Breed] {
         return penguinsBreedsList.filter { breed in
             
-            !(vector.temp.value >= 9 && breed.mathParams.temp <= 3) &&
+            !(vector.temp.value >= 9 && breed.mathParams.temp <= 3) &&   // ← было 7, стало 3
             
             !(vector.space.value <= 2 && breed.mathParams.space >= 5) &&
             
-            !(vector.activity.value <= 5 && breed.mathParams.activity >= 5) &&
+            !(vector.activity.value <= 2 && breed.mathParams.activity >= 8) &&
             
-            !(vector.noise.value <= 3 && breed.mathParams.noise >= 5) &&
+            !(vector.noise.value <= 2 && breed.mathParams.noise >= 8) &&
             
-            !(vector.social.value <= 3 && breed.mathParams.social >= 6)
+            !(vector.social.value <= 2 && breed.mathParams.social >= 8)
         }
     }
 }

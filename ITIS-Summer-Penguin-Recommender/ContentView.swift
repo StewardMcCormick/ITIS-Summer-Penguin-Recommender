@@ -23,10 +23,11 @@ struct ContentView: View {
     
     var body: some View {
         Group {
-            if viewModel.isLoggedIn {
+            if viewModel.isLoggedIn, let currentUser = viewModel.currentUser {
                 QuizView(quizStorage: quizStorage,
                          viewModel: viewModel,
-                         penguineRecommender: penguinRecommender
+                         penguineRecommender: penguinRecommender,
+                         historyStorage: HistoryStorage(userId: currentUser.id)
                 )
             } else {
                 LoginView(viewModel: viewModel)
